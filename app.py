@@ -1,3 +1,4 @@
+from forms import AddCupcakeForm
 from flask import Flask, json, request, jsonify, render_template, flash
 from flask.wrappers import Response
 from werkzeug.utils import redirect
@@ -17,7 +18,9 @@ connect_db(app)
 def show_list():
     """Lists cupcakes"""
 
-    return render_template('cupcakes.html')
+    form = AddCupcakeForm()
+
+    return render_template('cupcakes.html', form=form)
 
 @app.route('/api/cupcakes')
 def list_cupcakes():
@@ -50,6 +53,8 @@ def add_upcake():
         size = request.json['size']
         rating = request.json['rating']
         image = request.json.get('image', default_img)
+        if image == '':
+            image = None
 
         cupcake = Cupcake(flavor=flavor, size=size, rating=rating, image=image)
 
